@@ -50,9 +50,17 @@ class _MyHomePageState extends State<MyHomePage> {
           });
         },
       ),
-      Schedule(),
+      SchedulePage(gotoTaskPage: () {
+        setState(() {
+          selectedIndex=3;
+        });
+      },),
       Focus_page(),
-      Tasks_page(),
+      TasksPage(onAddTask: () {
+        setState(() {
+          selectedIndex=5;
+        });
+      },),
       Status_page(),
       GenrateTimetabel()
     ];
@@ -66,43 +74,23 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Color(0xFF7F3DFF),
         title: Row(
           children: [
-            Container(
-              width: 36,
-              height:36,
-              decoration:BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0x4C353535),
-                    offset: Offset(0, 1)
-                  )
-                ],
-                gradient: LinearGradient(colors: [Color(0xFF7F3DFF), Color(
-                    0xFF4B20C5)]),
-                borderRadius: BorderRadius.circular(12),
+            // ... icon same
+            Text(
+              selectedIndex == 0 ? "Study Planner" :
+              selectedIndex == 1 ? "Schedule" :
+              selectedIndex == 2 ? "Focus" :
+              selectedIndex == 3 ? "Tasks" :
+              selectedIndex == 4 ? "Stats" :
+              "Generate Timetable",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.2,
               ),
-                child: Icon(
-                  Icons.auto_awesome,
-                  color: Colors.white,
-                  size: 20,
-                )
             ),
-            SizedBox(width: 5,),
-            Text("Study Planner",style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1.2,
-            ),),
             Spacer(),
-            Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: Color(0xff6e43da),
-                borderRadius:BorderRadius.circular(12)
-              ),
-              child: IconButton(onPressed: (){}, icon: Icon(Icons.notifications_none_outlined,color: Colors.white,))
-            )
+            // ... notification icon
           ],
         ),
       ),
