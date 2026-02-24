@@ -15,7 +15,7 @@ class _TimerCardState extends State<TimerCard> {
   int remainingsecond = 25 * 60;
   Timer? timer;
   bool isRunning = false;
-  int focussec=0;
+  int focussec = 0;
 
   double get process => remainingsecond / (selectMinutes * 60);
 
@@ -38,14 +38,16 @@ class _TimerCardState extends State<TimerCard> {
         t.cancel();
         setState(() => isRunning = false);
       } else {
-        setState(() { remainingsecond--;
-        focussec++;});
+        setState(() {
+          remainingsecond--;
+          focussec++;
+        });
         widget.onFocusUpdate(focussec);
       }
     });
   }
 
-  int get FocusTime=>focussec~/60;
+  int get FocusTime => focussec ~/ 60;
   void resetTimer() {
     timer?.cancel();
     setState(() {
@@ -107,7 +109,10 @@ class _TimerCardState extends State<TimerCard> {
             ),
             const SizedBox(height: 10),
 
-            Row(children: [_chip(25), _chip(30), _chip(45), _chip(50)]),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [_chip(25), _chip(30), _chip(45), _chip(50)],
+            ),
             const SizedBox(height: 30),
             Center(
               child: Text(
@@ -149,7 +154,6 @@ class _TimerCardState extends State<TimerCard> {
                       ),
                       SizedBox(height: 4),
                       Text("Focus", style: TextStyle(color: Colors.white60)),
-
                     ],
                   ),
                 ],
@@ -158,21 +162,19 @@ class _TimerCardState extends State<TimerCard> {
             Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children:[ ElevatedButton.icon(
-                icon: Icon(Icons.play_arrow),
-                onPressed: startTimer,
-                label: Text("Start"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.blue,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 26,
-                    vertical: 14,
+              children: [
+                ElevatedButton.icon(
+                  icon: Icon(Icons.play_arrow),
+                  onPressed: startTimer,
+                  label: Text("Start"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.blue,
+                    padding: EdgeInsets.symmetric(horizontal: 26, vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
                 ),
                 SizedBox(width: 16),
                 Container(
@@ -186,8 +188,9 @@ class _TimerCardState extends State<TimerCard> {
                     color: Colors.white,
                     iconSize: 28,
                   ),
-                )
-            ])
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -201,7 +204,7 @@ class _TimerCardState extends State<TimerCard> {
         selectDuration(minutes);
       },
       child: Container(
-        margin: const EdgeInsets.only(right: 10),
+        margin: const EdgeInsets.only(right: 8.0),
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
         decoration: BoxDecoration(
           color: active ? Colors.white : Colors.black12,

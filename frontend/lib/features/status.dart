@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../services/timetable_service.dart';
+import '../services/timetable_service.dart';
 import '../styles/stats_content/card.dart';
 import '../styles/stats_content/weekly_chart.dart';
 
