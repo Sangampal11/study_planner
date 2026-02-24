@@ -8,7 +8,14 @@ class homePage extends StatefulWidget {
   final VoidCallback? onTasks;
   final VoidCallback? onFocus;
   final VoidCallback? onAnalytics;
-  const homePage({super.key, required this.onGenrate, this.onTimetable, this.onTasks, this.onFocus, this.onAnalytics});
+  const homePage({
+    super.key,
+    required this.onGenrate,
+    this.onTimetable,
+    this.onTasks,
+    this.onFocus,
+    this.onAnalytics,
+  });
 
   @override
   State<homePage> createState() => homePageState();
@@ -87,6 +94,7 @@ class homePageState extends State<homePage> {
                 itemCount: 4,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
+                  mainAxisExtent: 120,
                   crossAxisSpacing: 15,
                   mainAxisSpacing: 12,
                   childAspectRatio: 1.6, // safe height

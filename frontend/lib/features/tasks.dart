@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../services/timetable_service.dart';
+import '../services/timetable_service.dart';
 import '../styles/task_content/card.dart';
 
 class TasksPage extends StatefulWidget {

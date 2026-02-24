@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../services/timetable_service.dart';// TasksPage import kar le
+import '../services/timetable_service.dart';// TasksPage import kar le
 
 class SchedulePage extends StatefulWidget {
   final VoidCallback? gotoTaskPage;
