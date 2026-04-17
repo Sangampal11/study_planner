@@ -25,31 +25,32 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY','fallback-secret-key-for-dev-only')
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fallback-key-change-in-production')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = ["*"]  # local development ke liye, baad mein update kar denge
+# Updated for production
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'study_planner.mongo_configs.MongoAdminConfig',
-    'study_planner.mongo_configs.MongoAuthConfig',
-    'study_planner.mongo_configs.MongoContentTypesConfig',
-
-    # Baaki sab built-in jo override nahi kar rahe
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Tere extra
+    # Third party
     'rest_framework',
     'rest_framework_simplejwt',
-    'studyapp.apps.StudyappConfig',
     'corsheaders',
+
+    # Local
+    'studyapp.apps.StudyappConfig',
 ]
 
 MIDDLEWARE = [
@@ -84,20 +85,28 @@ WSGI_APPLICATION = 'study_planner.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# Using SQLite for development
+# For production with MongoDB, install djongo and update this configuration
 DATABASES = {
     'default': {
-        'ENGINE': 'django_mongodb_backend',  # MongoDB ke liye engine
-        'NAME': 'study_planner_db',  # database ka naam
-        'HOST': os.getenv('MONGODB_URI'), 
-         'OPTIONS': {
-            'tls': True,
-            'tlsAllowInvalidCertificates': True,  # temporary skip
-            'tlsCAFile': certifi.where(),         # certifi ka trusted CA bundle use karo
-        } # MongoDB Atlas URI environment variable se
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# MongoDB configuration (for future production use)
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME': 'study_planner_db',
+#         'ENFORCE_SCHEMA_VALIDATION': False,
+#         'CLIENT': {
+#             'host': os.getenv('MONGODB_URI'),
+#         }
+#     }
+# }
 
 
 # Password validation
@@ -119,17 +128,32 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 #Neeche jaake yeh add kar (Flutter se connect hone ke liye)
-CORS_ALLOW_ALL_ORIGINS = True   # development ke liye theek hai, baad mein change kar denge
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:3000,http://127.0.0.1:3000').split(',')
+CORS_ALLOW_CREDENTIALS = True
 
 # REST_FRAMEWORK settings add kar (file ke end mein)
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_RENDERER_CLASSES': [                  # ← yeh add kar sakta hai
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',  # browser view ke liye
     ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+# JWT Configuration (keeping for reference if needed)
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': False,
 }
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
@@ -143,7 +167,7 @@ USE_I18N = True
 USE_TZ = True
 
 # Yeh line add kar (agar nahi hai to)
-DEFAULT_AUTO_FIELD = 'django_mongodb_backend.fields.ObjectIdAutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Static files (CSS, JavaScript, Images)
